@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Player - Paused on Load</title>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <style>
+    body {
+      background-color: rgb(215, 207, 177);
+    }
+    #playerContainer {
+      transition: opacity 5s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div id="playerContainer">
+    <div id="player"></div>
+  </div>
+  <button onclick="startPlayback()">Start Playback</button>
+  <button onclick="getCurrentVideoUrl()">Get Current Video URL</button>
+  <button onclick="returnToPreviousVideo()">Return to Previous Video</button>
+  <input type="number" id="durationInput" placeholder="Enter minutes" />
+  <button onclick="startPlaybackWithCustomDuration()">Start with Custom Duration</button>
+  <p> </p>
+  <p> </p>
+  <p>"Axis of Equals" Cine-O-Moto-Tope<br></p>
+  <p><b>Axis of Equals</b><br>live concert event proposal: <br>artists from across Southwest Asian, North African, Jewish global communities <br>combining traditional sounds with contemporary approaches (rock, hip hop, jazz, electronica, ++)<br>presented at multiple stages in Lower Manhattan, near Ground Zero, <br>approaching or near September 11th <br><br>“a multiplicity of voices is a template for healing”</p>
+  <p><br>Cine-O-Tope instructions:<br><br>choose a duration for cinema playback (minutes) and enter in text box above<br><br>then, press "Start with Custom Duration"<br><br>videos will play back, at random start and end points, selected at random<br><br>"Start Playback" will advance video to another, new selection<br><br>to view full video, click "get current url" to display video url to select and copy<br><br>press "play previous video" to see previously-displayed video<br><br> project can be muted by clicking "mute" on video player<br><br>to stop project, close browser window<br><br>
+<br>
+    <b>Axis of Equals:</b> <br>
+   <br>The following artists are exemplary of the concert event concept and of those artists intended to be contacted for event participation:<br><br>
+    Kamilya Jubran<br>Sussan Deyhim<br>Pharaoh's Daughter (Basya Schechter)<br>David Fiuczynski (Screaming Headless Torsos, Hasidic New Wave, Kif)<br>The Mast (Haleh Gafori<br>)Noah Hoffeld<br>The Klezmatics<br>Matisyahu<br>Tareq Rantisi<br>Simon Shaheen<br>Çark (Nihan Devecioglu, Cenk Erdogan, Adam Matta)<br>Y-Love and DeScribe<br>DAM<br>Gaida and Rufus Cappadocia<br>Eyal Maoz (Edom)<br>Suheir Hammad<br>Vanessa Hidary<br>Remi Kanazi<br>Cuban-Jewish All Stars<br>Paradox Trio<br>Maryam Saleh<br>Al Sarah and the Nubatones<br>Souad Massi<br>Mycale (John Zorn)<br>Alya Al-Sultani<br>Noa<br>Brother Ali<br>Ofra Haza<br>Tinariwen<br>Secret Chiefs 3<br>Nour Harkati<br>Emel Mathlouthi<br>Matt Darriau's "Who is Manny Blanc?"<br>Faraj Abyad<br>
+    <br>full Axis of Equals video playlist(Youtube): <a href="https://youtube.com/playlist?list=PLhvoo7_4PSH6sNxVyvDFPz0BJgsCVRLBf&si=WcfbmrZZON8itKuQtarget=" target="_blank">Axis of Equals</a> <br><br>
+    Artists included represent vision of "Axis of Equals," combining traditional sounds and stories with contemporary approaches (rock, hip hop, jazz, electronica, more), but project remains only an initiatory selection of the myriad artists and projects worldwide who explore similar approachesNo artists above have provided express permission or support for project<br><br>Playlist and project created by Adam Matta, as online users have created playlists with Matta's content<br>
+    
+    possible worksheet questions:<br><br>
+    
+    1. In 2002, when George W. Bush announced to the American public that an invasion of Iraq was necessary and imminent, he used the phrase "Axis of Evil" to refer to Iran, Iraq and North Korea. At the time of this speech, were those nations, especially Iraq and Iran, collaborators and allies, as were WWII's "Axis Powers?"
+    <br><br>
+    2. Of the videos included in the playlist, which are your three favorite? What similarities might these share (possiblities include: music genre, lyric content or style, musical scales, modes, tempos, instrumentation, other formal elements)?<br><br>
+    Axis of Equals was originally conceived in 2007 as a live concert festival event in Lower Manhattan, at multiple venues, over a weekend approaching or near the date of 9/11, potentially incorporating art exhibits, film screenings, panel discussions, live music improvisation sessions, and more<br>
+    
+    </p>    
+
+
+  <script>
+    let currentPlayer;
+    let currentVideoId;
+    let previousVideoId;
+    let playbackTimeout;
+    let fadeoutInterval;
+    let videoTimeout;
+
+    const videos = [     
+{id: '_5wCqXxEM5E', start: getRandomInt},
+{id: 'xvfzpR_qRdE', start: getRandomInt},
+{id: 'WsoDEV4XmqM', start: getRandomInt},
+{id: 'wmzKNmAfeOI', start: getRandomInt},
+{id: 'b1Z4PAZX9Bs', start: getRandomInt},
+{id: 'OblSZbuvykk', start: getRandomInt},
+{id: 'S-gAKFtl7VI', start: getRandomInt},
+{id: '0aQ7fhkuRe4', start: getRandomInt},
+{id: 'uzom2VkVrf8', start: getRandomInt},
+{id: 'fUJ3oZTDPH4', start: getRandomInt},
+{id: 'EPSXJgD68kE', start: getRandomInt},
+{id: 'cwdR2VdYt1c', start: getRandomInt},
+{id: '12x42D10IIo', start: getRandomInt},
+{id: 'amHIOuOkKxg', start: getRandomInt},
+{id: 'SrF_JNZUts8', start: getRandomInt},
+{id: 'pkqV_CwGVSc', start: getRandomInt},
+{id: 'CEq4og0ei58', start: getRandomInt},
+{id: 'GR4JbMsb4kU', start: getRandomInt},
+{id: '-QgHmDgvzA8', start: getRandomInt},
+{id: 'vJtoy-Mb6YA', start: getRandomInt},
+{id: 'GmyFpnih4SE', start: getRandomInt},
+{id: '0OT4gnQZ5Po', start: getRandomInt},
+{id: '-jCGOpKDU34', start: getRandomInt},
+{id: 'kHouILmM5eA', start: getRandomInt},
+{id: 'dxAEwZPHhsc', start: getRandomInt},
+{id: '5hXLWQ1Da5M', start: getRandomInt},
+{id: 'vr1Izh3r7Pc', start: getRandomInt},
+{id: 'tJarh9YRPIA', start: getRandomInt},
+{id: 'PrkEkm6OqxE', start: getRandomInt},
+{id: 'ZJNrfIopyqc', start: getRandomInt},
+{id: 'sZzc8wwluP4', start: getRandomInt},
+{id: 'UeJkzqDArK0', start: getRandomInt},
+{id: 'fgVzemvELmk', start: getRandomInt},
+{id: '3kS2uHwWZ_0', start: getRandomInt},
+{id: 'Vi8k2rDSqAA', start: getRandomInt},
+{id: '1xOxHyTP91c', start: getRandomInt},
+{id: 'ZyhGbMQ-yLE', start: getRandomInt},
+{id: 'z7_2Jjs79tQ', start: getRandomInt},
+{id: 'ZbP1y9UP-r8', start: getRandomInt},
+{id: '2VdSV9dbUHs', start: getRandomInt},
+{id: 'xFF34i_KrWw', start: getRandomInt},
+{id: 'Qj8vWHSxa8M', start: getRandomInt},
+{id: 'b8OYIBX3HOE', start: getRandomInt},
+{id: '81uJZIF9TCs', start: getRandomInt},
+{id: 'jwu8UPiHky8', start: getRandomInt},
+{id: 'b9ykAf4SE6I', start: getRandomInt},
+{id: 'TytbMZUcurI', start: getRandomInt},
+{id: 'wTh3J6jKHQ4', start: getRandomInt},
+{id: 'nhPpeiI8_lI', start: getRandomInt},
+{id: '9gbc5Dq6PZE', start: getRandomInt},
+{id: 'DnixzPalEZs', start: getRandomInt},
+{id: 'w-gj8jiWL7g', start: getRandomInt},
+{id: 'v9LzyW1P82Q', start: getRandomInt},
+{id: 'nxoOlUtmd9Y', start: getRandomInt},
+{id: 'xuhB07Z_A8s', start: getRandomInt},
+{id: 'M_fcrciV7tk', start: getRandomInt},
+{id: 'anlZc0T8rfo', start: getRandomInt},
+{id: '3sypo24UcgU', start: getRandomInt},
+{id: 'muV2sWAyyCM', start: getRandomInt},
+{id: '8J-_UNfZMM8', start: getRandomInt},
+{id: 'u1p9kj-odnU', start: getRandomInt},
+{id: 'QW15u3-feVs', start: getRandomInt},
+{id: 'RLK4aYI2YGQ', start: getRandomInt},
+{id: 'xPWRXkjONcM', start: getRandomInt},
+{id: 'SXVMj2kknGE', start: getRandomInt},
+{id: 'ZyUYP46-cgY', start: getRandomInt},
+{id: '7CIeq-EK3gg', start: getRandomInt},
+{id: 'uuSsvpqhcEs', start: getRandomInt},
+{id: 'NoaSSpWTEE0', start: getRandomInt},
+{id: 'Oy50xGevdZk', start: getRandomInt},
+{id: 'Y1SOQwWvbvc', start: getRandomInt},
+{id: 'kBVZG1NraXc', start: getRandomInt},
+{id: '7LyumCAFGvk', start: getRandomInt},
+{id: '7rLCrrPeXa0', start: getRandomInt},
+{id: 'kXRm4LxuX5w', start: getRandomInt},
+{id: 'FBlnrRUVfo0', start: getRandomInt},
+{id: 'ifCwPidxsqA', start: getRandomInt},
+{id: 'w9XDUBDMNuk', start: getRandomInt},
+{id: 'tuQVo0nBzWQ', start: getRandomInt},
+{id: '0dHxaJLdkks', start: getRandomInt},
+{id: 'cXWbMu4PtpE', start: getRandomInt},
+{id: 'EFn8aoiyA0o', start: getRandomInt},
+{id: 'ECvOxeoRjp0', start: getRandomInt},
+{id: 'a9WoE9hJTG4', start: getRandomInt},
+{id: 'r4_a2Fhl90A', start: getRandomInt},
+{id: 'vbbr5HWgKyc', start: getRandomInt},
+{id: 'HvrhDJRm_eY', start: getRandomInt},
+{id: 'klX6cPeoD0s', start: getRandomInt},
+{id: 'AzgD8uoGQYc', start: getRandomInt},
+{id: 'IDbfSDJVOr4', start: getRandomInt},
+{id: 'eHi7G0j65Go', start: getRandomInt},
+{id: '2A-zCEMyNV4', start: getRandomInt},
+{id: '-6-WQTjiIyU', start: getRandomInt},
+{id: 'j2QWPDWh8EI', start: getRandomInt},
+{id: 'ebfDS-wISuo', start: getRandomInt},
+{id: 'bRzQ6QY8d4U', start: getRandomInt},
+{id: 'UMBo6SnxPKk', start: getRandomInt},
+{id: 'vx-sY5RCSnE', start: getRandomInt},
+{id: 'BtgtEOAfU0E', start: getRandomInt},
+{id: '1CQmXqlGs_Q', start: getRandomInt},
+{id: '_sHaLXREwnY', start: getRandomInt},
+{id: 'fFGJTPioByA', start: getRandomInt},
+{id: '_3btG0g5_Zg', start: getRandomInt},
+{id: 'H8P7IzxYPX4', start: getRandomInt},
+{id: 'vMDlbgYcXVA', start: getRandomInt},
+{id: 'HHcslj3wIHw', start: getRandomInt},
+{id: 'D0pgFgcF9oI', start: getRandomInt},
+{id: 'UOh4tKteFOs', start: getRandomInt},
+{id: 'KShG2Fsc0Fs', start: getRandomInt},
+{id: '4hWCMcLXWoA', start: getRandomInt},
+{id: 'foQRTNzKxkU', start: getRandomInt},
+{id: 'AzrrBiF9sb8', start: getRandomInt},
+{id: '-VlThib7elo', start: getRandomInt},
+{id: 'QOVdTXZMXP4', start: getRandomInt},
+{id: 'pZlqCKPa9dw', start: getRandomInt},
+{id: 's2VNbpL2KGY', start: getRandomInt},
+{id: 'Z_ilbTU5zGQ', start: getRandomInt},
+{id: 'Nyq9xl55uhM', start: getRandomInt},
+{id: 'eJ6AEbvI7pE', start: getRandomInt},
+{id: 'Y3nqih1NNgA', start: getRandomInt},
+{id: 'ECoiVV9iVTc', start: getRandomInt},
+{id: '0kUyQT5Nd2E', start: getRandomInt},
+{id: '1GMXEek7uMI', start: getRandomInt},
+{id: 'jkas2ZTlHcQ', start: getRandomInt},
+{id: '51mTzBBzaQw', start: getRandomInt},
+{id: 'Xt2na9iI4Eo', start: getRandomInt},
+{id: 'jlCzHGoIhcQ', start: getRandomInt},
+{id: 'NF5qbIUBsG4', start: getRandomInt},
+{id: 'IePSOA29tWM', start: getRandomInt},
+{id: 'jomp9qxfviA', start: getRandomInt},
+{id: '7UqV_5rVTNc', start: getRandomInt},
+{id: 'Nsd_O19G5gk', start: getRandomInt},
+{id: 'Ah_x2hcqvg4', start: getRandomInt},
+{id: 'G5pM8Aq-sKo', start: getRandomInt},
+{id: 'gfErjPvJrwQ', start: getRandomInt},
+{id: 'D8fHatctfRo', start: getRandomInt},
+{id: 'AHw1xt6X2eE', start: getRandomInt},
+{id: 'WjaIGK9am_k', start: getRandomInt},
+{id: 'l3oxU9-zeiA', start: getRandomInt},
+{id: 't9L97FcvVag', start: getRandomInt},
+{id: 'xUrE-jxhDEc', start: getRandomInt},
+{id: 'OJVFId8n9QU', start: getRandomInt},
+{id: 'Zf7oE8AVBSs', start: getRandomInt},
+{id: '9oDP7UJ43Y0', start: getRandomInt},
+{id: 'cXWJnviTnGE', start: getRandomInt},
+{id: 'zxR1HSEeFHc', start: getRandomInt},
+{id: '2aQykuIaJVI', start: getRandomInt},
+{id: 'sQ3Xr5Ni9Qg', start: getRandomInt},
+{id: 'L-gKYFSKxjo', start: getRandomInt},
+{id: 'dcTksX_QQ0o', start: getRandomInt},
+{id: 'y37lsTUGQBE', start: getRandomInt},
+{id: 'ZPqVig-ggMw', start: getRandomInt},
+{id: 'vFxdTDreoJE', start: getRandomInt},
+{id: 'sRy66AeH7oo', start: getRandomInt},
+{id: 'vTTncEUy8jY', start: getRandomInt},
+{id: 'FHRJqqAgh9M', start: getRandomInt},
+{id: 'dqc9XEDHI-4', start: getRandomInt},
+{id: 'Qb-b9AmfsVU', start: getRandomInt},
+{id: 'LlO1P_h4y3g', start: getRandomInt},
+{id: 'gEtK-N0xJys', start: getRandomInt},
+{id: 'NvJLDNp79YE', start: getRandomInt},
+{id: 'a7GEASz7JfU', start: getRandomInt},
+{id: 'ZsEmCSV4sH0', start: getRandomInt},
+{id: 'v6dpUZobTEQ', start: getRandomInt},
+{id: 'JZM69noyDf4', start: getRandomInt},
+{id: 'vHPL9MAFu6k', start: getRandomInt},
+{id: 'xWh_-1nSfNc', start: getRandomInt},
+{id: 'yZNTse7bafI', start: getRandomInt},
+{id: 'zUTAvx2zCDU', start: getRandomInt},
+{id: 'DPmIEAmB6JE', start: getRandomInt},
+{id: 'zt_0wsK2BV4', start: getRandomInt},
+{id: 'qis08cjd23I', start: getRandomInt},
+{id: 'JTeKpWp8Psw', start: getRandomInt},
+{id: 'a-IelfZkZdk', start: getRandomInt},
+{id: 'r_kbMqqTtyo', start: getRandomInt},
+{id: 'jy2geNttXU4', start: getRandomInt},
+{id: 'uIdMUuLepGQ', start: getRandomInt},
+{id: 'zb1H-bHmq5U', start: getRandomInt},
+{id: 'JWHEnr6XQuc', start: getRandomInt},
+{id: 'crfyvWLLHbQ', start: getRandomInt},
+{id: 'QsWFbMc5t84', start: getRandomInt},
+{id: 'sxJZQYeQ1p8', start: getRandomInt}
+    ];
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getRandomVideo() {
+      const video = videos[Math.floor(Math.random() * videos.length)];
+      return { id: video.id, start: getRandomInt(0, 120) };
+    }
+
+    function createPlayer(videoId, startTime = 0, autoplay = false) {
+      return new YT.Player('player', {
+        height: '480',
+        width: '854',
+        videoId: videoId,
+        playerVars: {
+          autoplay: autoplay ? 1 : 0,
+          start: startTime
+        },
+        events: {
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function playRandomVideo() {
+      clearTimeout(videoTimeout);
+      const video = getRandomVideo();
+      previousVideoId = currentVideoId;
+      currentVideoId = video.id;
+
+      const playerContainer = document.getElementById('playerContainer');
+      playerContainer.innerHTML = '<div id="player"></div>';
+      playerContainer.style.opacity = 1;
+      currentPlayer = createPlayer(video.id, video.start, true);
+
+      const randomDuration = getRandomInt(30, 120) * 1000;
+      videoTimeout = setTimeout(playRandomVideo, randomDuration);
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        playRandomVideo();
+      }
+    }
+
+    function startPlayback(duration = 80) {
+      clearTimeout(playbackTimeout);
+      clearInterval(fadeoutInterval);
+      clearTimeout(videoTimeout);
+      playRandomVideo();
+
+      playbackTimeout = setTimeout(() => {
+        fadeOutAndStop();
+      }, duration * 60 * 1000);
+    }
+
+    function startPlaybackWithCustomDuration() {
+      const duration = parseInt(document.getElementById('durationInput').value);
+      if (!isNaN(duration) && duration > 0) {
+        startPlayback(duration);
+      } else {
+        alert('Please enter a valid number of minutes.');
+      }
+    }
+
+    function fadeOutAndStop() {
+      if (!currentPlayer) return;
+      let volume = 100;
+      let opacity = 1;
+      fadeoutInterval = setInterval(() => {
+        if (volume > 0 || opacity > 0) {
+          volume = Math.max(0, volume - 2);
+          opacity = Math.max(0, opacity - 0.02);
+          currentPlayer.setVolume(volume);
+          document.getElementById('playerContainer').style.opacity = opacity;
+        } else {
+          clearInterval(fadeoutInterval);
+          currentPlayer.stopVideo();
+        }
+      }, 100);
+    }
+
+    function getCurrentVideoUrl() {
+      alert('Current Video URL: https://www.youtube.com/watch?v=' + currentVideoId);
+    }
+
+    function returnToPreviousVideo() {
+      if (previousVideoId) {
+        currentVideoId = previousVideoId;
+        playRandomVideo();
+      }
+    }
+
+    function onYouTubeIframeAPIReady() {
+      const previewVideo = getRandomVideo();
+      currentVideoId = previewVideo.id;
+      currentPlayer = createPlayer(previewVideo.id, previewVideo.start, false); // NO autoplay
+    }
+  </script>
+</body>
+</html>
